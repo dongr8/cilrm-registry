@@ -496,14 +496,14 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
                   <div key={field.key}>
                     <label className="label" htmlFor={`field-${field.key}`}>
                       {field.label}
-                      {field.key === "memberId" ? (role === "root" ? " (root editable)" : " (root admin only)") : ""}
+                      {field.key === "memberId" ? (editor.mode === "create" ? " — enter manually, or leave blank to auto-generate" : role === "root" ? " — editable by root" : " — root admin only") : ""}
                     </label>
                     {field.key === "status" ? (
                       <select id={`field-${field.key}`} className="input" value={editor.record[field.key] ?? ""} onChange={(event) => setEditor((current) => current ? { ...current, record: { ...current.record, [field.key]: event.target.value } } : current)}>
                         <option value="">Select status</option>
                         {MEMBER_STATUSES.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
-                    ) : field.key === "memberId" && role !== "root" ? (
+                    ) : field.key === "memberId" && editor.mode === "edit" && role !== "root" ? (
                       <input id={`field-${field.key}`} className="input bg-stone-100 text-stone-500" value={editor.record[field.key] ?? ""} readOnly />
                     ) : field.key === "category" || field.key === "grade" ? (
                       <input id={`field-${field.key}`} list="category-options" className="input" value={editor.record[field.key] ?? ""} onChange={(event) => setEditor((current) => current ? { ...current, record: { ...current.record, [field.key]: event.target.value } } : current)} />
