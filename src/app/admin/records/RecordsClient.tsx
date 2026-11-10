@@ -224,12 +224,12 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
       if (!navigator.onLine || (err instanceof Error && err.message === "Failed to fetch")) {
         if (editor.mode === "create") {
           await queueOperation({ kind: "create", record, queuedAt: new Date().toISOString() });
-          setToast({ tone: "warn", text: "Offline — new member saved on this device and queued for sync." });
+          setToast({ tone: "warn", text: "Offline â€” new member saved on this device and queued for sync." });
           setEditor(null);
         } else {
           await queueOperation({ kind: "update", recordId: editor.row!.id, record, queuedAt: new Date().toISOString() });
           setRows((current) => current.map((row) => (row.id === editor.row!.id ? { ...row, data: record, memberId: record.memberId || row.memberId, fullName: fullNameOf(record), status: record.status || row.status } : row)));
-          setToast({ tone: "warn", text: "Offline — changes saved on this device and queued for sync." });
+          setToast({ tone: "warn", text: "Offline â€” changes saved on this device and queued for sync." });
           setEditor(null);
         }
       } else {
@@ -253,7 +253,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
       const url = `${window.location.origin}${data.link.url}`;
       try {
         await navigator.clipboard.writeText(url);
-        setToast({ tone: "ok", text: `Guest link for ${row.memberId} copied — paste it into WhatsApp, SMS or email.` });
+        setToast({ tone: "ok", text: `Guest link for ${row.memberId} copied â€” paste it into WhatsApp, SMS or email.` });
       } catch {
         setToast({ tone: "ok", text: `Guest link created: ${url}` });
       }
@@ -280,7 +280,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
       if (!navigator.onLine || (err instanceof Error && err.message === "Failed to fetch")) {
         await queueOperation({ kind: "delete", recordId: row.id, queuedAt: new Date().toISOString() });
         setRows((current) => current.filter((item) => item.id !== row.id));
-        setToast({ tone: "warn", text: "Offline — deletion queued; the record will be removed on sync." });
+        setToast({ tone: "warn", text: "Offline â€” deletion queued; the record will be removed on sync." });
       } else {
         setToast({ tone: "error", text: err instanceof Error ? err.message : "Delete failed" });
       }
@@ -294,7 +294,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-600">Records menu</p>
           <h2 className="mt-1 text-2xl font-black tracking-tight text-stone-900">Membership directory</h2>
           <p className="mt-1 text-sm text-stone-500">
-            {nf.format(total)} record{total === 1 ? "" : "s"} · signed in as {adminName} ({role === "root" ? "root admin" : "admin"})
+            {nf.format(total)} record{total === 1 ? "" : "s"} Â· signed in as {adminName} ({role === "root" ? "root admin" : "admin"})
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -318,7 +318,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
 
       {offline ? (
         <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-medium text-amber-800">
-          Offline — showing the register copy saved on this device. Edits, deletions and additions are queued and sync automatically.
+          Offline â€” showing the register copy saved on this device. Edits, deletions and additions are queued and sync automatically.
         </p>
       ) : null}
       {toast ? (
@@ -338,7 +338,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
               onSubmit={() => { setFocusedId(null); load(); }}
               offlineSource={offlineSuggest}
               endpoint="/api/admin/records/suggest"
-              placeholder="Start typing a name, reg. number, phone, e-mail or address…"
+              placeholder="Start typing a name, reg. number, phone, e-mail or addressâ€¦"
               ariaLabel="Search member records"
             />
             <div className="grid grid-cols-2 gap-2 lg:flex">
@@ -356,13 +356,13 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
               </select>
               <select className="input lg:w-36" value={sort} onChange={(event) => setSort(event.target.value)}>
                 <option value="recent">Recently updated</option>
-                <option value="name">Name A–Z</option>
+                <option value="name">Name Aâ€“Z</option>
                 <option value="memberId">Reg. number</option>
               </select>
             </div>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-500">
-            <span>{loading ? "Loading register…" : `Showing ${rows.length ? (page - 1) * pageSize + 1 : 0}–${Math.min(page * pageSize, total)} of ${nf.format(total)}`}</span>
+            <span>{loading ? "Loading registerâ€¦" : `Showing ${rows.length ? (page - 1) * pageSize + 1 : 0}â€“${Math.min(page * pageSize, total)} of ${nf.format(total)}`}</span>
             <span className="flex items-center gap-2">
               Rows
               <select className="rounded-lg border border-[#e6d9ce] bg-white px-2 py-1 text-[11px]" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }}>
@@ -376,7 +376,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
           <table className="w-full min-w-[900px] border-separate border-spacing-0">
             <thead className="bg-[#fffdfb]">
               <tr>
-                <th className="th">Name (First · Second · Third)</th>
+                <th className="th">Name (First Â· Second Â· Third)</th>
                 <th className="th">Reg. Number</th>
                 <th className="th">Grade</th>
                 <th className="th">Cert.</th>
@@ -480,7 +480,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-600">{editor.mode === "create" ? "New record" : "Edit record"}</p>
                 <h3 className="text-lg font-bold text-stone-900">{editor.mode === "create" ? "Add a member" : `${editor.row?.memberId}`}</h3>
               </div>
-              <button type="button" className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100" onClick={() => setEditor(null)} aria-label="Close">✕</button>
+              <button type="button" className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100" onClick={() => setEditor(null)} aria-label="Close">âœ•</button>
             </div>
             <div className="flex-1 overflow-y-auto scroll-thin px-4 py-4 sm:px-5">
               <div className="mb-3 rounded-xl border border-brand-200 bg-brand-50/60 px-3 py-2 text-[11px] leading-relaxed text-brand-900">
@@ -496,7 +496,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
                   <div key={field.key}>
                     <label className="label" htmlFor={`field-${field.key}`}>
                       {field.label}
-                      {field.key === "memberId" ? (editor.mode === "create" ? " � enter manually, or leave blank to auto-generate" : role === "root" ? " � editable by root" : " � root admin only") : ""}
+                      {field.key === "memberId" ? (editor.mode === "create" ? " — enter manually, or leave blank to auto-generate" : role === "root" ? " — editable by root" : " — root admin only") : ""}
                     </label>
                     {field.key === "status" ? (
                       <select id={`field-${field.key}`} className="input" value={editor.record[field.key] ?? ""} onChange={(event) => setEditor((current) => current ? { ...current, record: { ...current.record, [field.key]: event.target.value } } : current)}>
@@ -537,14 +537,14 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
                 <datalist id="category-options">{MEMBER_CATEGORIES.map((option) => <option key={option} value={option} />)}</datalist>
               </div>
               <p className="mt-3 rounded-lg bg-brand-50 px-3 py-2 text-[11px] text-brand-800">
-                Preview: <strong>{display(editor.record.firstName)}</strong> · <strong>{display(editor.record.secondName)}</strong> · <strong>{display(editor.record.thirdName)}</strong>. All {MEMBER_FIELDS.length} fields are stored in the original import format. Membership / registration numbers can only be changed by the root admin — contact root if a number is wrong.
+                Preview: <strong>{display(editor.record.firstName)}</strong> Â· <strong>{display(editor.record.secondName)}</strong> Â· <strong>{display(editor.record.thirdName)}</strong>. All {MEMBER_FIELDS.length} fields are stored in the original import format. Membership / registration numbers can only be changed by the root admin â€” contact root if a number is wrong.
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#f1e7df] px-5 py-4">
-              <span className="text-[11px] text-stone-400">Tip: paste a phone tail or email — guests verify with those.</span>
+              <span className="text-[11px] text-stone-400">Tip: paste a phone tail or email â€” guests verify with those.</span>
               <div className="flex gap-2">
                 <button type="button" className="btn-secondary" onClick={() => setEditor(null)}>Cancel</button>
-                <button type="button" className="btn-primary" onClick={saveRecord} disabled={saving}>{saving ? "Saving…" : "Save record"}</button>
+                <button type="button" className="btn-primary" onClick={saveRecord} disabled={saving}>{saving ? "Savingâ€¦" : "Save record"}</button>
               </div>
             </div>
           </div>
@@ -555,7 +555,7 @@ export default function RecordsClient({ role, adminName }: { role: string; admin
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl">
             <h3 className="text-lg font-bold text-stone-900">Delete this record?</h3>
-            <p className="mt-1 text-sm text-stone-600">{fullNameOf(pendingDelete.data, pendingDelete.fullName) || NIL} · {pendingDelete.memberId}. This is logged and cannot be undone from the app — restore from a vault snapshot if needed.</p>
+            <p className="mt-1 text-sm text-stone-600">{fullNameOf(pendingDelete.data, pendingDelete.fullName) || NIL} Â· {pendingDelete.memberId}. This is logged and cannot be undone from the app â€” restore from a vault snapshot if needed.</p>
             <div className="mt-4 flex gap-2">
               <button type="button" className="btn-secondary flex-1" onClick={() => setPendingDelete(null)}>Cancel</button>
               <button type="button" className="btn-danger flex-1" onClick={confirmDelete}>Delete record</button>
